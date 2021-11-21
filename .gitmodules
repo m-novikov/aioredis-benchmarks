@@ -1,0 +1,6 @@
+[submodule "vendor/aioredis-py-master"]
+	path = vendor/aioredis-py-master
+	url = https://github.com/aio-libs/aioredis-py
+[submodule "vendor/aioredis-py-1.3"]
+	path = vendor/aioredis-py-1.3
+	url = https://github.com/aio-libs/aioredis-py
