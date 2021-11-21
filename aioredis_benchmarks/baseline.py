@@ -50,11 +50,11 @@ class RedisProtocol(asyncio.Protocol):
 
         if self._state == _State.connected:
             # It's possible that connection was dropped and connection_callback was not
-            # called yet, to stop spamming errors, avoid writing to broken pipe
-            # Both _UnixWritePipeTransport and _SelectorSocketTransport that we
-            # expect to see here have this attribute
-            if not self._transport._conn_lost:
+            # called yet, to stop spamming errors, avoid writing to closed connection
+            # buffer all futures to communicate reason after we get the info
+            if not self._transport.is_closing():
                 self._transport.write(cmd)
+
             self._resp_queue.append(fut)
 
         elif self._state == _State.not_connected:
@@ -80,6 +80,7 @@ class RedisProtocol(asyncio.Protocol):
                 # Extra unexpected data received from connection
                 # e.g. connected to non-redis service
                 self._set_exception(Exception("extra data"))
+                break
 
             else:
                 fut.set_result(res)
