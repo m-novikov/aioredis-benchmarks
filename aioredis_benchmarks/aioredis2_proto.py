@@ -23,15 +23,14 @@ async def run(n=1500):
     pool = BlockingConnectionPool.from_url(
         url=url, max_connections=max_conn
     )
-    conn = await pool.get_connection("_")
-    redis = Redis(connection_pool=pool).client()
-    redis.connection = conn
 
-    tasks = [asyncio.create_task(task(i, redis)) for i in range(n)]
-    start = time.time()
-    await asyncio.gather(*tasks)
-    t = time.time() - start
-    print(f'aioredis2_proto: {n} tasks with blocking pool with *1* connection: {t}s')
+    async with Redis(connection_pool=pool).client() as redis:
+        tasks = [asyncio.create_task(task(i, redis)) for i in range(n)]
+
+        start = time.time()
+        await asyncio.gather(*tasks)
+        t = time.time() - start
+        print(f'aioredis2_proto: {n} tasks with blocking pool with *1* connection: {t}s')
 
 
 if __name__ == "__main__":
