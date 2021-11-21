@@ -20,7 +20,8 @@ REDIS_URL="redis://localhost:6379/" NUM_ITERATIONS=1500 MAX_CONNECTIONS=1 make b
 Results with locally running redis:
 
 ```
-simple_async: 1500 tasks with blocking pool with 64 connections: 0.049057960510253906s
-aioredis1: 1500 tasks with blocking pool with 64 connections: 0.0681612491607666s
-aioredis2: 1500 tasks with blocking pool with 64 connections: 0.3374614715576172s
+simple_async: 1500 tasks with blocking pool with 64 connections: 0.048108816146850586s
+aioredis1: 1500 tasks with blocking pool with 64 connections: 0.07063984870910645s
+aioredis2: 1500 tasks with blocking pool with 64 connections: 0.34310436248779297s
+aioredis2_proto: 1500 tasks with blocking pool with *1* connection: 0.0847783088684082s
 ```

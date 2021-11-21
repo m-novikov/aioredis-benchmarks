@@ -4,3 +4,6 @@
 [submodule "vendor/aioredis-py-1.3"]
 	path = vendor/aioredis-py-1.3
 	url = https://github.com/aio-libs/aioredis-py
+[submodule "vendor/aioredis-py-asyncio-protocol"]
+	path = vendor/aioredis-py-asyncio-protocol
+	url = https://github.com/m-novikov/aioredis-py

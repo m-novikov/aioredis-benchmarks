@@ -18,3 +18,4 @@ benchmark:
 	@python -m aioredis_benchmarks.baseline
 	@PYTHONPATH="$(ROOT_DIR)/vendor/aioredis-py-1.3" python -m aioredis_benchmarks.aioredis1
 	@PYTHONPATH="$(ROOT_DIR)/vendor/aioredis-py-master" python -m aioredis_benchmarks.aioredis2
+	@PYTHONPATH="$(ROOT_DIR)/vendor/aioredis-py-asyncio-protocol" python -m aioredis_benchmarks.aioredis2_proto
