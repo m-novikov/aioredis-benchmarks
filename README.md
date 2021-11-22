@@ -25,3 +25,12 @@ aioredis1: 1500 tasks with blocking pool with 64 connections: 0.0706398487091064
 aioredis2: 1500 tasks with blocking pool with 64 connections: 0.34310436248779297s
 aioredis2_proto: 1500 tasks with blocking pool with *1* connection: 0.0847783088684082s
 ```
+
+Results with remote running redis:
+
+```
+simple_async: 10000 tasks with blocking pool with 64 connections: 0.364227294921875s
+aioredis1: 10000 tasks with blocking pool with 64 connections: 0.42733216285705566s
+aioredis2: 10000 tasks with blocking pool with 64 connections: 16.949565649032593s
+aioredis2_proto: 10000 tasks with blocking pool with *1* connection: 0.5196411609649658s
+```

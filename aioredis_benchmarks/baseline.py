@@ -123,22 +123,35 @@ class Conneciton:
 
 
 class RedisWithTransports:
-    def __init__(self, host, port, max_conn):
+    def __init__(self, host, port, max_conn, username=None, password=None):
         self._host = host
         self._port = port
         self._max_conn = max_conn
         self._connection_pool = deque(maxlen=self._max_conn)
+        self._username = username
+        self._password = password
 
     async def initialize_connection_pool(self):
         for _ in range(self._max_conn):
             conn = Conneciton(self._host, self._port)
             await conn.connect()
+            if self._username and self._password:
+                auth_resp = await conn.send_command(
+                    b"AUTH %b %b\r\n"
+                    % (self._username.encode(), self._password.encode())
+                )
+                assert auth_resp == b"OK"
             self._connection_pool.append(conn)
 
     def execute_command(self, cmd):
         conn = self._connection_pool.popleft()
         self._connection_pool.append(conn)
         return conn.send_command(cmd)
+
+    async def auth(self, user: str, password: str):
+        return await self.execute_command(
+            b"AUTH %b %b\r\n" % (user.encode(), password.encode())
+        )
 
     async def get(self, key: str) -> bytes:
         return await self.execute_command(b"GET %b\r\n" % key.encode())
@@ -160,7 +173,11 @@ async def task(i, redis):
 async def run(n=1500):
     parsed = urlparse(bench_config.url)
     simple_client = RedisWithTransports(
-        parsed.hostname, parsed.port, max_conn=bench_config.max_conn
+        parsed.hostname,
+        parsed.port,
+        max_conn=bench_config.max_conn,
+        username=parsed.username,
+        password=parsed.password,
     )
     await simple_client.initialize_connection_pool()
 
